@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ContentModule } from './infrastructure/http/content/content.module';
 import { AuthModule } from './infrastructure/http/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { WebSocketModule } from './infrastructure/websockets/websocket.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     ContentModule,
     AuthModule,
+    WebSocketModule,
   ],
   controllers: [],
   providers: [],
