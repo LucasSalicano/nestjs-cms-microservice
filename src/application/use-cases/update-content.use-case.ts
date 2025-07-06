@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Content } from '../../domain/entities/content.entity';
 import { Repository } from 'typeorm';
 import { ContentVersion } from '../../domain/entities/content-versions.entity';
+import { EventPublisher } from '../services/event-emitter.port';
+import { ContentUpdatedEvent } from '../../domain/events/content-updated.event';
 
 @Injectable()
 export class UpdateContentUseCase {
@@ -11,7 +13,7 @@ export class UpdateContentUseCase {
     private readonly contentRepo: Repository<Content>,
     @InjectRepository(ContentVersion)
     private readonly versionRepo: Repository<ContentVersion>,
-    // private readonly queue: ContentQueueService,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
   async execute(
@@ -34,7 +36,10 @@ export class UpdateContentUseCase {
 
     const updated = await this.contentRepo.save(content);
 
-    // await this.queue.publishContentUpdated(content.id);
+    await this.eventPublisher.publish(
+      'Content:Updated',
+      new ContentUpdatedEvent(content.id),
+    );
 
     return updated;
   }

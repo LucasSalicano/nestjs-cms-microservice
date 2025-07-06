@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ContentModule } from './infrastructure/http/content/content.module';
-import { BullmqProviderModule } from './infrastructure/queues/bullmq.module';
 
 @Module({
   imports: [
@@ -16,7 +15,6 @@ import { BullmqProviderModule } from './infrastructure/queues/bullmq.module';
       synchronize: true,
     }),
     ContentModule,
-    BullmqProviderModule,
   ],
   controllers: [],
   providers: [],
