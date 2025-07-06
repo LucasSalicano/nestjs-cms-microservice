@@ -9,14 +9,15 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { CreateContentUseCase } from '../../../application/use-cases/create-content.use-case.js';
-import { UpdateContentUseCase } from '../../../application/use-cases/update-content.use-case';
-import { GetAllContentWithVersionsUseCase } from '../../../application/use-cases/get-all-content-with-versions.use-case';
-import { DeleteContentUseCase } from '../../../application/use-cases/delete-content.use-case';
 import { JwtAuthGuard } from '../../../../shared/guards/jwt-auth.guard';
 import { Roles } from '../../../../shared/decorators/roles.decorator';
 import { RolesGuard } from '../../../../shared/guards/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetByIdContentUseCase } from '../../../application/use-cases/contents/get-by-id-content.use-case';
+import { CreateContentUseCase } from '../../../application/use-cases/contents/create-content.use-case';
+import { UpdateContentUseCase } from '../../../application/use-cases/contents/update-content.use-case';
+import { GetAllContentWithVersionsUseCase } from '../../../application/use-cases/contents/get-all-content-with-versions.use-case';
+import { DeleteContentUseCase } from '../../../application/use-cases/contents/delete-content.use-case';
 
 @ApiTags('Content')
 @Controller({ path: 'contents', version: '1' })
@@ -26,10 +27,12 @@ export class ContentController {
     private readonly updateContent: UpdateContentUseCase,
     private readonly getAllContentWithVersions: GetAllContentWithVersionsUseCase,
     private readonly deleteContent: DeleteContentUseCase,
+    private readonly getByIdContentUseCase: GetByIdContentUseCase,
   ) {}
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @Roles('Admin', 'Editor', 'Author', 'Viewer')
   @Get()
   async findAll() {
     return this.getAllContentWithVersions.execute();
@@ -61,5 +64,13 @@ export class ContentController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.deleteContent.execute(id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Roles('Admin', 'Editor', 'Author', 'Viewer')
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return this.getByIdContentUseCase.execute(id);
   }
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Content } from '../../domain/entities/content.entity';
 import { Repository } from 'typeorm';
-import { ContentVersion } from '../../domain/entities/content-versions.entity';
-import { EventPublisher } from '../services/event-emitter.port';
-import { ContentUpdatedEvent } from '../../domain/events/content-updated.event';
+import { Content } from '../../../domain/entities/content.entity';
+import { ContentVersion } from '../../../domain/entities/content-versions.entity';
+import { EventPublisher } from '../../services/event-emitter.port';
+import { ContentUpdatedEvent } from '../../../domain/events/content-updated.event';
 
 @Injectable()
 export class UpdateContentUseCase {

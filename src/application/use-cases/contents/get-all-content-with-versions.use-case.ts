@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Content } from '../../domain/entities/content.entity.js';
 import { Repository } from 'typeorm';
-import { ContentVersion } from '../../domain/entities/content-versions.entity';
+import { ContentVersion } from '../../../domain/entities/content-versions.entity';
+import { Content } from '../../../domain/entities/content.entity';
 
 @Injectable()
 export class GetAllContentWithVersionsUseCase {
