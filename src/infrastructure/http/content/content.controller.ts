@@ -6,11 +6,16 @@ import {
   Param,
   Get,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CreateContentUseCase } from '../../../application/use-cases/create-content.use-case.js';
 import { UpdateContentUseCase } from '../../../application/use-cases/update-content.use-case';
 import { GetAllContentWithVersionsUseCase } from '../../../application/use-cases/get-all-content-with-versions.use-case';
 import { DeleteContentUseCase } from '../../../application/use-cases/delete-content.use-case';
+import { JwtAuthGuard } from '../../../../shared/guards/jwt-auth.guard';
+import { Roles } from '../../../../shared/decorators/roles.decorator';
+import { RolesGuard } from '../../../../shared/guards/roles.guard';
 
 @Controller({ path: 'contents', version: '1' })
 export class ContentController {
@@ -21,16 +26,22 @@ export class ContentController {
     private readonly deleteContent: DeleteContentUseCase,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
     return this.getAllContentWithVersions.execute();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin', 'Editor', 'Author')
   @Post()
-  async create(@Body() body: { title: string; body: string }) {
-    return this.createContent.execute(body);
+  async create(@Req() req, @Body() body: { title: string; body: string }) {
+    const userId: string = req.user.userId;
+    return this.createContent.execute(body, userId);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin', 'Editor')
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -39,6 +50,8 @@ export class ContentController {
     return this.updateContent.execute(id, body);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin', 'Editor', 'Author')
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.deleteContent.execute(id);

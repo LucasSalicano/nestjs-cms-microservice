@@ -13,13 +13,11 @@ export class CreateContentUseCase {
     // private readonly queue: ContentQueueService,
   ) {}
 
-  async execute(data: { title: string; body: string }): Promise<Content> {
-    const content = this.contentRepo.create(data);
-    const saved = await this.contentRepo.save(content);
-
-    // Emit event
-    // await this.queue.publishContentUpdated(saved.id);
-
-    return saved;
+  async execute(
+    data: { title: string; body: string },
+    userId: string,
+  ): Promise<Content> {
+    const content = this.contentRepo.create({ ...data, createdBy: userId });
+    return await this.contentRepo.save(content);
   }
 }
