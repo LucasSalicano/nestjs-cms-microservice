@@ -1,6 +1,17 @@
 version: '3.9'
 
 services:
+  api:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
   postgres:
     image: postgres:16
     container_name: cms_postgres
