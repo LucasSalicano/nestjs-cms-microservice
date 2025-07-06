@@ -16,7 +16,9 @@ import { DeleteContentUseCase } from '../../../application/use-cases/delete-cont
 import { JwtAuthGuard } from '../../../../shared/guards/jwt-auth.guard';
 import { Roles } from '../../../../shared/decorators/roles.decorator';
 import { RolesGuard } from '../../../../shared/guards/roles.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Content')
 @Controller({ path: 'contents', version: '1' })
 export class ContentController {
   constructor(
@@ -26,12 +28,14 @@ export class ContentController {
     private readonly deleteContent: DeleteContentUseCase,
   ) {}
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
     return this.getAllContentWithVersions.execute();
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin', 'Editor', 'Author')
   @Post()
@@ -40,6 +44,7 @@ export class ContentController {
     return this.createContent.execute(body, userId);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin', 'Editor')
   @Put(':id')
@@ -50,6 +55,7 @@ export class ContentController {
     return this.updateContent.execute(id, body);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('Admin', 'Editor', 'Author')
   @Delete(':id')

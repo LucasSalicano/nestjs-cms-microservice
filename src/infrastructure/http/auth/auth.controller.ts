@@ -9,7 +9,9 @@ import {
 import { LoginUseCase } from '../../../application/use-cases/login.use-case.js';
 import { RegisterUserUseCase } from '../../../application/use-cases/register-user.use-case';
 import { JwtAuthGuard } from '../../../../shared/guards/jwt-auth.guard';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(
@@ -17,11 +19,30 @@ export class AuthController {
     private readonly registerUserUseCase: RegisterUserUseCase,
   ) {}
 
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string' },
+        password: { type: 'string' },
+      },
+    },
+  })
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
     return this.loginUseCase.execute(body.email, body.password);
   }
 
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string' },
+        password: { type: 'string' },
+        role: { type: 'string', enum: ['Admin', 'Editor', 'Author', 'Viewer'] },
+      },
+    },
+  })
   @Post('register')
   async register(
     @Body()
@@ -38,6 +59,7 @@ export class AuthController {
     );
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@Request() req) {
