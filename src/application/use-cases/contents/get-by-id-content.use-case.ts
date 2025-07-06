@@ -16,13 +16,13 @@ export class GetByIdContentUseCase {
   async execute(id: string): Promise<Content & { versions: ContentVersion[] }> {
     const content = await this.contentRepo.findOneByOrFail({ id });
 
-    const versions = await this.versionRepo.findOneByOrFail({
+    const versions = await this.versionRepo.findBy({
       contentId: content.id,
     });
 
     return {
       ...content,
-      versions: [versions],
+      versions: versions,
     };
   }
 }

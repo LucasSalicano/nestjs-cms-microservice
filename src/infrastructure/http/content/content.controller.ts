@@ -52,10 +52,12 @@ export class ContentController {
   @Roles('Admin', 'Editor')
   @Put(':id')
   async update(
+    @Req() req,
     @Param('id') id: string,
     @Body() body: { title: string; body: string },
   ) {
-    return this.updateContent.execute(id, body);
+    const userId: string = req.user.userId;
+    return this.updateContent.execute(id, body, userId);
   }
 
   @ApiBearerAuth()

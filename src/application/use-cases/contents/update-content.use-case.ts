@@ -19,6 +19,7 @@ export class UpdateContentUseCase {
   async execute(
     id: string,
     dto: { title: string; body: string },
+    userId: string,
   ): Promise<Content> {
     const content = await this.contentRepo.findOneByOrFail({ id });
 
@@ -27,11 +28,11 @@ export class UpdateContentUseCase {
       version: content.version,
       title: content.title,
       body: content.body,
-      createdBy: 'system',
+      createdBy: userId,
     });
 
-    content.title = dto.title;
-    content.body = dto.body;
+    content.title = dto.title || content.title;
+    content.body = dto.body || content.body;
     content.version += 1;
 
     const updated = await this.contentRepo.save(content);

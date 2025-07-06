@@ -23,5 +23,6 @@ import { GetByIdContentUseCase } from '../../../application/use-cases/contents/g
     DeleteContentUseCase,
     GetByIdContentUseCase,
   ],
+  exports: [UpdateContentUseCase],
 })
 export class ContentModule {}

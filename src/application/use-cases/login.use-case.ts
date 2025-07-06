@@ -15,7 +15,7 @@ export class LoginUseCase {
   async execute(
     email: string,
     password: string,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ access_token: string; userId: string; role: string }> {
     const user = await this.userRepo.findOneBy({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
@@ -23,6 +23,6 @@ export class LoginUseCase {
 
     const payload = { sub: user.id, role: user.role };
     const token = this.jwtService.sign(payload);
-    return { access_token: token };
+    return { access_token: token, userId: user.id, role: user.role };
   }
 }
