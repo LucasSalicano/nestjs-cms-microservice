@@ -45,16 +45,21 @@ $ git clone git@github.com:LucasSalicano/api-nestjs-microservices.git
 $ cd api-nestjs-microservices
 ```
 
-3. Install dependencies:
+3. Create a `.env` file in the root directory and configure your environment variables. You can use the provided `.env.example` as a reference:
+```bash
+$ cp .env.example .env
+```
+
+4. Install dependencies:
 ```bash
 $ npm install
 ```
 
-4. Run docker-compose to start the application:
+5. Run docker-compose to start the application:
 ```bash
 $ docker-compose up -d
 ```
-5. API Documentation will be available at:
+6. API Documentation will be available at:
 ```bash
 http://localhost:5000/api/docs
 ```
