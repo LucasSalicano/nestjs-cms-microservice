@@ -54,4 +54,7 @@ $ npm install
 ```bash
 $ docker-compose up -d
 ```
-5. Open your browser and navigate to `http://localhost:5000` to view the application.
+5. API Documentation will be available at:
+```bash
+http://localhost:5000/api/docs`
+```
