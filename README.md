@@ -56,5 +56,5 @@ $ docker-compose up -d
 ```
 5. API Documentation will be available at:
 ```bash
-http://localhost:5000/api/docs`
+http://localhost:5000/api/docs
 ```
